@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=1]
+
+[ext_resource path="res://addons/custom_nodes/brick2d/brick2d.gd" type="Script" id=1]
+[ext_resource path="res://addons/custom_nodes/brick2d/brick2d.png" type="Texture" id=2]
+[ext_resource path="res://sprites/brick.png" type="Texture" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 39.0174, 14.0267 )
+
+[sub_resource type="Animation" id=2]
+
+resource/name = "brick-hit"
+length = 0.2
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = { "times":FloatArray( 0, 0.2 ), "transitions":FloatArray( 1, 1 ), "update":0, "values":[ 0, 5 ] }
+
+[node name="Brick" type="StaticBody2D"]
+
+input/pickable = false
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
+collision/layers = 1
+collision/mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+script/script = ExtResource( 1 )
+__meta__ = { "_editor_icon":ExtResource( 2 ) }
+
+[node name="Sprite" type="Sprite" parent="."]
+
+texture = ExtResource( 3 )
+vframes = 6
+frame = 5
+__meta__ = { "_edit_lock_":true }
+
+[node name="Animation" type="AnimationPlayer" parent="Sprite"]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/brick-hit = SubResource( 2 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = ""
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
+__meta__ = { "_edit_lock_":true }
+
+[connection signal="finished" from="Sprite/Animation" to="." method="_on_Animation_finished"]
+
+
